@@ -78,7 +78,7 @@ def cal_k(freq, epsR):
 
 
 def cal_propagationConstant(k, kc):
-    return 1j*np.sqrt(k**2+kc**2)
+    return np.sqrt(k**2-kc**2)
 
 
 def cal_fc(a, b, mode, eps_r):
@@ -123,18 +123,17 @@ def cal_TE_modes(a, b, freq, epsR, X, Y, mode, plot):
     Ez = X*0
     # Calculate x-component:
     if mode[1] != 0:
+        
         Ex = (1j*w*mu0*mode[1]*np.pi/(kc**2 * b)) * np.cos(mode[0]*np.pi*X/a)*np.sin(mode[1]*np.pi*Y/b)
-        #Ex = Ex/np.linalg.norm(Ex)
-        #Ex = Ex/np.max(np.abs(Ex))
-        #Ex = mode[1]*np.cos(mode[0]*np.pi*X/a)*np.sin(mode[1]*np.pi*Y/b)
+        
     else:
+        
         Ex = X*0
     # Calculate y-component:
+        
     if mode[0] != 0:  
+        
         Ey = (-1j*w*mu0*mode[0]*np.pi/(kc**2 * a)) * np.sin(mode[0]*np.pi*X/a)*np.cos(mode[1]*np.pi*Y/b)
-        #Ey = Ey/np.linalg.norm(Ey)
-        #Ey = Ey/np.max(np.abs(Ey))
-        #Ey = -mode[0]*np.sin(mode[0]*np.pi*X/a)*np.cos(mode[1]*np.pi*Y/b)
 
     else:
         Ey = X*0
@@ -143,15 +142,12 @@ def cal_TE_modes(a, b, freq, epsR, X, Y, mode, plot):
     #----- H-field components -----
     Hz = np.cos(mode[0]*np.pi*X/a)*np.cos(mode[1]*np.pi*Y/b)
     # Calculate x-component:
-    #if mode[0] != 0:
+        
     Hx = (1j*beta*mode[0]*np.pi / (kc**2 * a))*np.sin(mode[0]*np.pi*X/a)*np.cos(mode[1]*np.pi*Y/b)
-    #else:
-        #Hx = X*0
+
     # Calculate y-component:
-    #if mode[1] != 0:    
+   
     Hy = (1j*beta*mode[1]*np.pi / (kc**2 * a))*np.cos(mode[0]*np.pi*X/a)*np.sin(mode[1]*np.pi*Y/b)
-    #else:
-        #Hy = X*0
     #------------------------------
     
     if plot:
@@ -160,8 +156,8 @@ def cal_TE_modes(a, b, freq, epsR, X, Y, mode, plot):
     E = np.array([Ex, Ey, Ez])
     H = np.array([Hx,Hy,Hz]) 
     k = np.sqrt(np.sum(cal_avg_poynting_vector(E, H)))
-    P = np.sum(cal_avg_poynting_vector(E/k, H/k))
-    print('P='+str(P))
+    #P = np.sum(cal_avg_poynting_vector(E/k, H/k))
+    #print('P='+str(P))
     return E/k, H/k#E / np.linalg.norm(E), H / np.linalg.norm(H)
 
 
@@ -220,9 +216,6 @@ def cal_reconstructed_intensity(E,c,a,b,freq,epsR,modes):
         else: 
             Z[i] = cal_Z_TM(a, b, value[0], freq, epsR)
         i += 1
-    # Multiply with elementwise with c, but maintain vector form: 
-    #print(Z)
-    # Ez = c[:,np.newaxis] * E[2]
     
     # Calculate intensity: 
     Ir = np.zeros(len(E[0][0]))
@@ -290,8 +283,7 @@ def get_modes(a, b, freq, epsR, N):
             modes[f'TM{mode[0]}{mode[1]}'] = [mode,fc]
             #print(f'TM{mode[0]}{mode[1]} with fc = '+str(fc*1e-9)+' GHz\n')
     modes = dict(sorted(modes.items(), key=lambda x: x[1][1]))
-    #TE_modes = [modes[key][0] for key in modes.keys() if 'TE' in key]
-    #TM_modes = [modes[key][0] for key in modes.keys() if 'TM' in key]
+
     
     return modes
 
@@ -314,7 +306,7 @@ def get_complex_set(N): # Function to generate a normalized set of complex numbe
 
     # Normalize each complex number
     z_normalized = z / np.sqrt(S)
-    print('Normalized set of complex numbers: \n'+str(z_normalized))
+    #print('Normalized set of complex numbers: \n'+str(z_normalized))
     
     return z_normalized
 

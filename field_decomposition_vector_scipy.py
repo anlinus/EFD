@@ -160,8 +160,8 @@ print('Normalization factor from field: '+str(k))
 Is = fd.cal_avg_poynting_vector(Es/k, Hs/k)
 #Is = fd.cal_avg_poynting_vector(Es, Hs)
 # Normalize field: 
-Es = Es / k#np.linalg.norm(Es)
-Hs = Hs / k#np.linalg.norm(Hs)
+Es = Es / k #np.linalg.norm(Es)
+Hs = Hs / k #np.linalg.norm(Hs)
 
 
 # Exctract COMSOL solution points: 
